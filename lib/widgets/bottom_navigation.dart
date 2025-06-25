@@ -11,7 +11,7 @@ class CustomBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 409,
       height: 73,
       child: Stack(
@@ -136,7 +136,7 @@ class CustomBottomNavigation extends StatelessWidget {
             right: 38,
             child: Column(
               children: [
-                Container(
+                SizedBox(
                   width: 27,
                   height: 27,
                   child: Wrap(

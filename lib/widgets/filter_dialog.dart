@@ -69,14 +69,14 @@ class _FilterDialogState extends State<FilterDialog> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Filter Options
-            ...._filterOptions.map((option) => _buildFilterOption(option)),
-            
+            ..._filterOptions.map((option) => _buildFilterOption(option)),
+
             const SizedBox(height: 32),
-            
+
             // Action Buttons
             Row(
               children: [
@@ -93,7 +93,7 @@ class _FilterDialogState extends State<FilterDialog> {
 
   Widget _buildFilterOption(Map<String, String> option) {
     final isSelected = _tempSelectedFilters.contains(option['key']);
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Material(
@@ -128,10 +128,13 @@ class _FilterDialogState extends State<FilterDialog> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected ? const Color(0xFF00DAE7) : Colors.white70,
+                      color:
+                          isSelected ? const Color(0xFF00DAE7) : Colors.white70,
                       width: 2,
                     ),
-                    color: isSelected ? const Color(0xFF00DAE7) : Colors.transparent,
+                    color: isSelected
+                        ? const Color(0xFF00DAE7)
+                        : Colors.transparent,
                   ),
                   child: isSelected
                       ? const Icon(

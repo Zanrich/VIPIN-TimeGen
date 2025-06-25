@@ -73,13 +73,17 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
       // Apply status filters
       if (_selectedFilters.isNotEmpty) {
         result = await TimeOffService.filterEmployees(_selectedFilters);
-        
+
         // If we also have a search query, filter the results further
         if (_searchQuery.isNotEmpty) {
           result = result
-              .where((employee) => 
-                  employee.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                  employee.position.toLowerCase().contains(_searchQuery.toLowerCase()))
+              .where((employee) =>
+                  employee.name
+                      .toLowerCase()
+                      .contains(_searchQuery.toLowerCase()) ||
+                  employee.position
+                      .toLowerCase()
+                      .contains(_searchQuery.toLowerCase()))
               .toList();
         }
       }
@@ -131,7 +135,8 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
     if (reason == null) return;
 
     try {
-      final success = await TimeOffService.declineTimeOff(employeeId, entryId, reason);
+      final success =
+          await TimeOffService.declineTimeOff(employeeId, entryId, reason);
       if (success) {
         _showSuccessSnackBar('Time off request declined');
         _loadEmployees(); // Refresh data
@@ -145,7 +150,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
 
   Future<String?> _showDeclineReasonDialog() async {
     final TextEditingController reasonController = TextEditingController();
-    
+
     return showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
@@ -228,7 +233,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                 left: 4,
                 child: CustomStatusBar(),
               ),
-              
+
               // Header
               Positioned(
                 top: 56,
@@ -236,12 +241,12 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                 right: 0,
                 child: _buildHeader(),
               ),
-              
+
               // Main Content Area
               Positioned(
                 top: 122,
                 left: -2,
-                child: Container(
+                child: SizedBox(
                   width: 428,
                   height: 814,
                   child: Container(
@@ -270,7 +275,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                           child: Column(
                             children: [
                               const SizedBox(height: 20),
-                              
+
                               // Search Bar and Filter Button
                               Row(
                                 children: [
@@ -281,7 +286,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                                   _buildFilterButton(),
                                 ],
                               ),
-                              
+
                               // Active Filters Display
                               if (_selectedFilters.isNotEmpty) ...[
                                 const SizedBox(height: 16),
@@ -290,7 +295,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                             ],
                           ),
                         ),
-                        
+
                         // Content Area
                         Expanded(
                           child: _isLoading
@@ -331,9 +336,9 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
           ),
-          
+
           const Spacer(),
-          
+
           // Title
           const Text(
             'Employee Time Off',
@@ -344,9 +349,9 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
               fontSize: 28,
             ),
           ),
-          
+
           const Spacer(),
-          
+
           // Close Button
           IconButton(
             onPressed: () => Navigator.pop(context),
@@ -435,7 +440,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           default:
             displayText = filter;
         }
-        
+
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
@@ -512,7 +517,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
   Widget _buildEmployeesList() {
     // Group entries by date for better organization
     final Map<String, List<Widget>> groupedEntries = {};
-    
+
     for (final employee in _filteredEmployees) {
       for (final entry in employee.timeOffEntries) {
         final dateKey = entry.submittedDate;
@@ -529,24 +534,24 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         );
       }
     }
-    
+
     // Sort dates in descending order (most recent first)
     final sortedDates = groupedEntries.keys.toList()
       ..sort((a, b) => b.compareTo(a));
-    
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       itemCount: sortedDates.length,
       itemBuilder: (context, index) {
         final date = sortedDates[index];
         final entries = groupedEntries[date]!;
-        
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Date Header
             Padding(
-              padding: const EdgeInsets.only(bottom: 16, top: index == 0 ? 0 : 24),
+              padding: EdgeInsets.only(bottom: 16, top: index == 0 ? 0 : 24),
               child: Text(
                 date,
                 style: const TextStyle(
@@ -557,7 +562,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                 ),
               ),
             ),
-            
+
             // Entries for this date
             ...entries,
           ],
