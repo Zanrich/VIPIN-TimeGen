@@ -225,7 +225,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           height: 936,
           decoration: BoxDecoration(
             color: const Color(0xFF111111),
-            borderRadius: BorderRadius.circular(35),
+            borderRadius: BorderRadius.circular(30),
           ),
           child: Stack(
             children: [
@@ -240,8 +240,8 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
               // Main Content Area (card with blue line inside)
               Positioned(
                 top: 92,
-                left: -2, // Negative to overflow and hide border on sides
-                right: -2,
+                left: -3, // Negative to overflow and hide border on sides
+                right: -3,
                 bottom: -20,
                 child: Container(
                   decoration: BoxDecoration(
@@ -256,35 +256,61 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                     ),
                   ),
                   child: Container(
-                    margin: const EdgeInsets.all(3), // Thickness of the border
+                    margin: const EdgeInsets.all(1), // Thickness of the border
                     decoration: BoxDecoration(
                       color: const Color(0xFF1F1F1F),
-                      borderRadius: BorderRadius.circular(29),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x26000000),
-                          offset: Offset(0, -4),
-                          blurRadius: 6,
-                          spreadRadius: 4,
-                        ),
-                      ],
+                      borderRadius: BorderRadius.circular(30),
+                      // boxShadow: const [
+                      //   BoxShadow(
+                      //     color: Color(0x26000000),
+                      //     offset: Offset(0, -4),
+                      //     blurRadius: 6,
+                      //     spreadRadius: 4,
+                      //   ),
+                      // ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         children: [
-                          const SizedBox(height: 20),
+                          // Screen title and back button
                           Row(
                             children: [
-                              Expanded(child: _buildSearchBar()),
-                              const SizedBox(width: 12),
+                              IconButton(
+                                icon: const Icon(Icons.arrow_back,
+                                    color: Colors.white, size: 28),
+                                onPressed: () => Navigator.of(context).pop(),
+                                tooltip: 'Back',
+                              ),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  'Employee Time Off',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              // Optionally, you can keep the filter button here or move it
                               _buildFilterButton(),
                             ],
                           ),
+                          const SizedBox(height: 18),
+
+                          // Search bar
+                          _buildSearchBar(),
+                          const SizedBox(height: 18),
+
+                          // Active filters (if any)
                           if (_selectedFilters.isNotEmpty) ...[
-                            const SizedBox(height: 16),
                             _buildActiveFilters(),
+                            const SizedBox(height: 18),
                           ],
+
+                          // The list of cards
                           Expanded(
                             child: _isLoading
                                 ? const Center(
@@ -480,7 +506,8 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
       ..sort((a, b) => b.compareTo(a));
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 8, vertical: 8), // less padding
       itemCount: sortedDates.length,
       itemBuilder: (context, index) {
         final date = sortedDates[index];

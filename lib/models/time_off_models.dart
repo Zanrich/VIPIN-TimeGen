@@ -11,6 +11,7 @@ class TimeOffEntryData {
   final String? approvedDate;
   final String? declinedDate;
   final String? managerComment;
+  final String? comment; // <-- Add this line
 
   const TimeOffEntryData({
     required this.id,
@@ -25,6 +26,7 @@ class TimeOffEntryData {
     this.approvedDate,
     this.declinedDate,
     this.managerComment,
+    this.comment,
   });
 
   TimeOffEntryData copyWith({

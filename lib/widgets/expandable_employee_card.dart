@@ -54,183 +54,209 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
   @override
   Widget build(BuildContext context) {
     // Status badge colors
-    Color statusColor;
     Color statusBorderColor;
+    Color statusTextColor;
+    Color statusBgColor;
     String statusText = widget.entry.status;
     switch (widget.entry.status.toLowerCase()) {
       case 'approved':
-        statusColor = const Color(0xFF4CAF50).withOpacity(0.15);
-        statusBorderColor = const Color(0xFF4CAF50);
- statusText = 'Approved';
+        statusBorderColor = const Color(0xFFB8FF99);
+        statusTextColor = const Color(0xFFB8FF99);
+        statusBgColor = Colors.transparent;
+        statusText = 'APPROVED';
         break;
       case 'declined':
       case 'rejected':
-        statusColor = const Color(0xFFF44336).withOpacity(0.15);
-        statusBorderColor = const Color(0xFFF44336);
- statusText = 'Declined';
+        statusBorderColor = const Color(0xFFFF8A80);
+        statusTextColor = const Color(0xFFFF8A80);
+        statusBgColor = Colors.transparent;
+        statusText = 'DECLINED';
         break;
       case 'pending':
- statusColor = Colors.white12; // Gray for 'Awaiting Approval'
- statusBorderColor = Colors.white38; // Gray for 'Awaiting Approval'
+        statusBorderColor = const Color(0xFFBDBDBD);
+        statusTextColor = const Color(0xFFBDBDBD);
+        statusBgColor = Colors.transparent;
+        statusText = 'AWAITING APPROVAL';
         break;
       default:
-        statusColor = Colors.white12;
         statusBorderColor = Colors.white38;
+        statusTextColor = Colors.white38;
+        statusBgColor = Colors.transparent;
     }
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       decoration: BoxDecoration(
-        color: const Color(0xFF232323),
-        borderRadius: BorderRadius.circular(22),
+        color: const Color(0xFF2B2B2B),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.25),
+            blurRadius: 6,
+            spreadRadius: 2,
+            offset: const Offset(0, 0),
           ),
         ],
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(20),
           onTap: _toggleExpand,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+            padding: const EdgeInsets.fromLTRB(24, 18, 24, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Row with avatar, name, leave type, status
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Avatar
                     CircleAvatar(
-                      radius: 22,
+                      radius: 27,
                       backgroundColor: const Color(0xFFBDBDBD),
                       backgroundImage: widget.employee.avatar.isNotEmpty
                           ? AssetImage(widget.employee.avatar)
                           : null,
                       child: widget.employee.avatar.isEmpty
                           ? const Icon(Icons.person,
-                              color: Colors.white, size: 28)
+                              color: Colors.white, size: 32)
                           : null,
                     ),
-                    const SizedBox(width: 14),
+                    const SizedBox(width: 18),
+                    // Name, subtitle, and chip
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             widget.employee.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
-                              fontSize: 17,
+                              fontSize: 16,
+                              fontFamily: 'Roboto',
+                              letterSpacing: 0.02,
                             ),
                           ),
+                          const SizedBox(height: 4),
                           Text(
                             '[${widget.employee.position}] | ${widget.entry.type}',
                             style: const TextStyle(
                               color: Color(0xFF00DAE7),
-                              fontSize: 14,
                               fontWeight: FontWeight.w400,
+                              fontSize: 13,
+                              fontFamily: 'Roboto',
+                              letterSpacing: 0.02,
                             ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3), // 3px gap to chip
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                height: 21,
+                                constraints: const BoxConstraints(minWidth: 64),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: statusBgColor,
+                                  borderRadius: BorderRadius.circular(50),
+                                  border: Border.all(
+                                      color: statusBorderColor, width: 1),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  statusText.toUpperCase(),
+                                  style: TextStyle(
+                                    color: statusTextColor,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 8,
+                                    fontFamily: 'Roboto',
+                                    letterSpacing: 0.02,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: statusColor,
- borderRadius: BorderRadius.circular(20), // More rounded
-                        border: Border.all(color: statusBorderColor, width: 1),
-                      ),
-                      child: Text(
-                        widget.entry.status.toUpperCase(),
-                        style: TextStyle(
-                          color: statusBorderColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    AnimatedRotation(
-                      turns: _expanded ? 0.5 : 0,
-                      duration: const Duration(milliseconds: 250),
-                      child: const Icon(
-                        Icons.keyboard_arrow_down,
-                        color: Colors.white54,
-                        size: 26,
-                      ),
-                    ),
                   ],
                 ),
-                // Expandable details
-                SizeTransition(
-                  sizeFactor: _expandAnimation,
-                  axisAlignment: -1,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 12),
+                // Expanded details (unchanged)
+                if (_expanded) ...[
+                  const SizedBox(height: 16),
+                  Divider(color: Colors.white12, height: 1),
+                  const SizedBox(height: 12),
+                  _buildDetailRow('Submitted:', widget.entry.submittedDate),
+                  _buildDetailRow(
+                    'Date:',
+                    '[${widget.entry.startDate} - ${widget.entry.endDate}] ([${widget.entry.daysCount}] ${widget.entry.daysCount == 1 ? 'Day' : 'Days'})',
+                  ),
+                  if (widget.entry.doctorsNote != null)
+                    _buildDetailRow('Doctor\'s Note:',
+                        widget.entry.doctorsNote ? 'Yes' : 'No'),
+                  if (widget.entry.managerComment != null &&
+                      widget.entry.managerComment!.isNotEmpty)
+                    _buildDetailRow('Comment [Manager]:',
+                        '[${widget.entry.managerComment!}]'),
+                  if (widget.entry.comment != null &&
+                      widget.entry.comment!.isNotEmpty)
+                    _buildDetailRow('Comment:', '[${widget.entry.comment!}]'),
+                  if (widget.entry.status.toLowerCase() == 'approved' &&
+                      widget.entry.approvedDate != null)
+                    _buildDetailRow(
+                        'Approved:', '[${widget.entry.approvedDate!}]'),
+                  if (widget.entry.status.toLowerCase() == 'declined' &&
+                      widget.entry.declinedDate != null)
+                    _buildDetailRow(
+                        'Declined:', '[${widget.entry.declinedDate!}]'),
+                  if (widget.entry.status.toLowerCase() == 'pending') ...[
+                    const SizedBox(height: 18),
+                    Row(
                       children: [
-                        Divider(color: Colors.white12, height: 1),
-                        const SizedBox(height: 12),
- if (widget.entry.status.toLowerCase() == 'pending') ...[
- _buildDetailRow('Submitted:', widget.entry.submissionDate), // Assuming you have a submissionDate
- _buildDetailRow('Date:', '${widget.entry.startDate} - ${widget.entry.endDate}'),
- _buildDetailRow('Duration:', '${widget.entry.daysCount} ${widget.entry.daysCount == 1 ? 'day' : 'days'}'),
- if (widget.entry.doctorNoteUrl != null && widget.entry.doctorNoteUrl!.isNotEmpty)
- _buildDetailRow('Doctor\'s Note:', 'View Attachment'), // Or a button to view
- if (widget.entry.reason.isNotEmpty)
- _buildDetailRow('Comment:', widget.entry.reason),
- const SizedBox(height: 16),
- Row(
- mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
- Expanded(
-                              child: ElevatedButton(
- onPressed: () {
- // Handle Approve action
- },
-                                child: const Text('Approve'),
- ),
- ),
- const SizedBox(width: 12),
- Expanded(
-                              child: ElevatedButton(
- onPressed: () {
- // Handle Decline action
- },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.redAccent),
-                                child: const Text('Decline'),
- ),
- ),
- ],
- ),
-                        ],
- else if (widget.entry.status.toLowerCase() == 'approved') ...[
- _buildDetailRow('Submitted:', widget.entry.submissionDate),
- _buildDetailRow('Date:', '${widget.entry.startDate} - ${widget.entry.endDate}'),
- _buildDetailRow('Duration:', '${widget.entry.daysCount} ${widget.entry.daysCount == 1 ? 'day' : 'days'}'),
- if (widget.entry.doctorNoteUrl != null && widget.entry.doctorNoteUrl!.isNotEmpty)
- _buildDetailRow('Doctor\'s Note:', 'View Attachment'),
- if (widget.entry.reason.isNotEmpty)
- _buildDetailRow('Comment:', widget.entry.reason),
- _buildDetailRow('Approved:', widget.entry.approvalDate ?? 'N/A'), // Assuming an approvalDate
-                        ],
- else if (widget.entry.status.toLowerCase() == 'declined' || widget.entry.status.toLowerCase() == 'rejected') ...[
- _buildDetailRow('Submitted:', widget.entry.submissionDate),
-                          _buildDetailRow('Reason:', widget.entry.reason),
+                        ElevatedButton(
+                          onPressed: () {
+                            // Approve logic here
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF00DAE7),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 8),
+                          ),
+                          child: const Text('Approve',
+                              style: TextStyle(fontWeight: FontWeight.w600)),
+                        ),
+                        const SizedBox(width: 12),
+                        OutlinedButton(
+                          onPressed: () {
+                            // Decline logic here
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Colors.white),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 8),
+                          ),
+                          child: const Text('Decline',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
                     ),
-                  ),
-                ),
+                  ],
+                ],
               ],
             ),
           ),
