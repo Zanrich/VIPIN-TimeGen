@@ -56,19 +56,22 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
     // Status badge colors
     Color statusColor;
     Color statusBorderColor;
+    String statusText = widget.entry.status;
     switch (widget.entry.status.toLowerCase()) {
       case 'approved':
         statusColor = const Color(0xFF4CAF50).withOpacity(0.15);
         statusBorderColor = const Color(0xFF4CAF50);
+ statusText = 'Approved';
         break;
       case 'declined':
       case 'rejected':
         statusColor = const Color(0xFFF44336).withOpacity(0.15);
         statusBorderColor = const Color(0xFFF44336);
+ statusText = 'Declined';
         break;
       case 'pending':
-        statusColor = const Color(0xFFFFA726).withOpacity(0.15);
-        statusBorderColor = const Color(0xFFFFA726);
+ statusColor = Colors.white12; // Gray for 'Awaiting Approval'
+ statusBorderColor = Colors.white38; // Gray for 'Awaiting Approval'
         break;
       default:
         statusColor = Colors.white12;
@@ -142,7 +145,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                           horizontal: 14, vertical: 6),
                       decoration: BoxDecoration(
                         color: statusColor,
-                        borderRadius: BorderRadius.circular(16),
+ borderRadius: BorderRadius.circular(20), // More rounded
                         border: Border.all(color: statusBorderColor, width: 1),
                       ),
                       child: Text(
@@ -177,11 +180,52 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                       children: [
                         Divider(color: Colors.white12, height: 1),
                         const SizedBox(height: 12),
-                        _buildDetailRow('Date:',
-                            '${widget.entry.startDate} - ${widget.entry.endDate}'),
-                        _buildDetailRow('Duration:',
-                            '${widget.entry.daysCount} ${widget.entry.daysCount == 1 ? 'day' : 'days'}'),
-                        if (widget.entry.reason.isNotEmpty)
+ if (widget.entry.status.toLowerCase() == 'pending') ...[
+ _buildDetailRow('Submitted:', widget.entry.submissionDate), // Assuming you have a submissionDate
+ _buildDetailRow('Date:', '${widget.entry.startDate} - ${widget.entry.endDate}'),
+ _buildDetailRow('Duration:', '${widget.entry.daysCount} ${widget.entry.daysCount == 1 ? 'day' : 'days'}'),
+ if (widget.entry.doctorNoteUrl != null && widget.entry.doctorNoteUrl!.isNotEmpty)
+ _buildDetailRow('Doctor\'s Note:', 'View Attachment'), // Or a button to view
+ if (widget.entry.reason.isNotEmpty)
+ _buildDetailRow('Comment:', widget.entry.reason),
+ const SizedBox(height: 16),
+ Row(
+ mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+ Expanded(
+                              child: ElevatedButton(
+ onPressed: () {
+ // Handle Approve action
+ },
+                                child: const Text('Approve'),
+ ),
+ ),
+ const SizedBox(width: 12),
+ Expanded(
+                              child: ElevatedButton(
+ onPressed: () {
+ // Handle Decline action
+ },
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent),
+                                child: const Text('Decline'),
+ ),
+ ),
+ ],
+ ),
+                        ],
+ else if (widget.entry.status.toLowerCase() == 'approved') ...[
+ _buildDetailRow('Submitted:', widget.entry.submissionDate),
+ _buildDetailRow('Date:', '${widget.entry.startDate} - ${widget.entry.endDate}'),
+ _buildDetailRow('Duration:', '${widget.entry.daysCount} ${widget.entry.daysCount == 1 ? 'day' : 'days'}'),
+ if (widget.entry.doctorNoteUrl != null && widget.entry.doctorNoteUrl!.isNotEmpty)
+ _buildDetailRow('Doctor\'s Note:', 'View Attachment'),
+ if (widget.entry.reason.isNotEmpty)
+ _buildDetailRow('Comment:', widget.entry.reason),
+ _buildDetailRow('Approved:', widget.entry.approvalDate ?? 'N/A'), // Assuming an approvalDate
+                        ],
+ else if (widget.entry.status.toLowerCase() == 'declined' || widget.entry.status.toLowerCase() == 'rejected') ...[
+ _buildDetailRow('Submitted:', widget.entry.submissionDate),
                           _buildDetailRow('Reason:', widget.entry.reason),
                       ],
                     ),
