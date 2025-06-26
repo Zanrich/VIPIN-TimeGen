@@ -4,6 +4,8 @@ import '../widgets/time_off_card.dart';
 import '../widgets/filter_dialog.dart';
 import '../models/time_off_models.dart';
 import '../services/time_off_service.dart';
+import '../widgets/app_header.dart';
+import '../widgets/expandable_employee_card.dart';
 
 class EmployeeTimeOffScreen extends StatefulWidget {
   const EmployeeTimeOffScreen({super.key});
@@ -227,38 +229,38 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           ),
           child: Stack(
             children: [
-              // Status Bar
+              // App Header
               const Positioned(
-                top: -5,
-                left: 4,
-                child: CustomStatusBar(),
-              ),
-
-              // Header
-              Positioned(
-                top: 56,
+                top: 0,
                 left: 0,
                 right: 0,
-                child: _buildHeader(),
+                child: AppHeader(),
               ),
 
-              // Main Content Area
+              // Main Content Area (card with blue line inside)
               Positioned(
-                top: 122,
-                left: -2,
-                child: SizedBox(
-                  width: 428,
-                  height: 814,
+                top: 92,
+                left: -2, // Negative to overflow and hide border on sides
+                right: -2,
+                bottom: -20,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF00DAE7),
+                        Color(0xFF0079A8),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
                   child: Container(
-                    width: 428,
-                    height: 779,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF1F1F1F),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
-                      boxShadow: [
+                    margin: const EdgeInsets.all(3), // Thickness of the border
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1F1F1F),
+                      borderRadius: BorderRadius.circular(29),
+                      boxShadow: const [
                         BoxShadow(
                           color: Color(0x26000000),
                           offset: Offset(0, -4),
@@ -267,48 +269,35 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                         ),
                       ],
                     ),
-                    child: Column(
-                      children: [
-                        // Search and Filter Section
-                        Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Column(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Row(
                             children: [
-                              const SizedBox(height: 20),
-
-                              // Search Bar and Filter Button
-                              Row(
-                                children: [
-                                  // Search Bar
-                                  Expanded(child: _buildSearchBar()),
-                                  const SizedBox(width: 12),
-                                  // Filter Button
-                                  _buildFilterButton(),
-                                ],
-                              ),
-
-                              // Active Filters Display
-                              if (_selectedFilters.isNotEmpty) ...[
-                                const SizedBox(height: 16),
-                                _buildActiveFilters(),
-                              ],
+                              Expanded(child: _buildSearchBar()),
+                              const SizedBox(width: 12),
+                              _buildFilterButton(),
                             ],
                           ),
-                        ),
-
-                        // Content Area
-                        Expanded(
-                          child: _isLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Color(0xFF00DAE7),
-                                  ),
-                                )
-                              : _filteredEmployees.isEmpty
-                                  ? _buildEmptyState()
-                                  : _buildEmployeesList(),
-                        ),
-                      ],
+                          if (_selectedFilters.isNotEmpty) ...[
+                            const SizedBox(height: 16),
+                            _buildActiveFilters(),
+                          ],
+                          Expanded(
+                            child: _isLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xFF00DAE7),
+                                    ),
+                                  )
+                                : _filteredEmployees.isEmpty
+                                    ? _buildEmptyState()
+                                    : _buildEmployeesList(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -316,54 +305,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        children: [
-          // Back Button
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24,
-            ),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
-
-          const Spacer(),
-
-          // Title
-          const Text(
-            'Employee Time Off',
-            style: TextStyle(
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFEDF2F4),
-              fontSize: 28,
-            ),
-          ),
-
-          const Spacer(),
-
-          // Close Button
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 30,
-            ),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
-        ],
       ),
     );
   }
@@ -525,11 +466,10 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           groupedEntries[dateKey] = [];
         }
         groupedEntries[dateKey]!.add(
-          TimeOffCard(
+          ExpandableEmployeeCard(
             employee: employee,
             entry: entry,
-            onApprove: _approveTimeOff,
-            onDecline: _declineTimeOff,
+            // Add callbacks if needed, or remove if not used in your ExpandableEmployeeCard
           ),
         );
       }

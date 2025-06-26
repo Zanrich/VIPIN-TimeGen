@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../models/nav_item.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
@@ -31,7 +32,7 @@ class CustomBottomNavigation extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Active Navigation Item (HOME)
           Positioned(
             top: 8,
@@ -79,17 +80,18 @@ class CustomBottomNavigation extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Timesheets Navigation Item
           Positioned(
             top: 12,
             left: 154,
             child: Column(
               children: [
-                Image.asset(
-                  'assets/images/event-3.png',
-                  width: 31,
-                  height: 31,
+                SvgPicture.asset(
+                  'assets/icons/calendar_today.svg',
+                  width: 24,
+                  height: 24,
+                  color: Colors.white, // Optional: force icon to white
                 ),
                 const SizedBox(height: 4),
                 const Text(
@@ -104,7 +106,7 @@ class CustomBottomNavigation extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Employees Navigation Item
           Positioned(
             top: 12,
@@ -112,9 +114,10 @@ class CustomBottomNavigation extends StatelessWidget {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/images/employee--1--2.png',
-                  width: 31,
-                  height: 31,
+                  'assets/icons/people.png',
+                  width: 24,
+                  height: 24,
+                  color: Colors.white, // if you want to tint
                 ),
                 const SizedBox(height: 4),
                 const Text(
@@ -129,7 +132,7 @@ class CustomBottomNavigation extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Menu Navigation Item
           Positioned(
             top: 15,
@@ -142,14 +145,16 @@ class CustomBottomNavigation extends StatelessWidget {
                   child: Wrap(
                     spacing: 4,
                     runSpacing: 4,
-                    children: List.generate(4, (index) => Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(2.5),
-                      ),
-                    )),
+                    children: List.generate(
+                        4,
+                        (index) => Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(2.5),
+                              ),
+                            )),
                   ),
                 ),
                 const SizedBox(height: 4),

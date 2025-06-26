@@ -4,6 +4,7 @@ import '../widgets/menu_item_card.dart';
 import '../widgets/custom_bottom_navigation.dart';
 import '../models/menu_item.dart';
 import '../models/nav_item.dart';
+import '../widgets/app_header.dart';
 
 class EmployerDashScreen extends StatefulWidget {
   const EmployerDashScreen({super.key});
@@ -70,43 +71,7 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
         child: Column(
           children: [
             // Header Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              child: Row(
-                children: [
-                  // Profile Image Placeholder
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white24,
-                    ),
-                    child:
-                        const Icon(Icons.person, size: 32, color: Colors.white),
-                  ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Text(
-                      'Time Gen',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 28,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon:
-                        const Icon(Icons.close, color: Colors.white, size: 28),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
-            ),
+            const AppHeader(),
             // Main Card Section fills the rest of the screen
             Expanded(
               child: Center(

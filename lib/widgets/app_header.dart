@@ -5,47 +5,64 @@ class AppHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // User Avatar
-          Container(
-            width: 54,
-            height: 54,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(27),
-              image: const DecorationImage(
-                image: AssetImage('assets/images/user-10.png'),
-                fit: BoxFit.cover,
+    return Container(
+      color: const Color(0xFF111111), // Match notification bar
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: SafeArea(
+        bottom: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Profile Image in White Circle
+            Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/user-10.png',
+                  fit: BoxFit.cover,
+                  width: 44,
+                  height: 44,
+                ),
               ),
             ),
-          ),
-          
-          // App Title
-          const Text(
-            'Time Gen',
-            style: TextStyle(
-              fontFamily: 'Roboto',
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFEDF2F4),
-              fontSize: 28,
+
+            // App Title
+            const Text(
+              'Time Gen',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFEDF2F4),
+                fontSize: 28,
+              ),
             ),
-          ),
-          
-          // Close Button
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 30,
+
+            // Close Button with white background and black icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                  size: 24,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
             ),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -24,3 +24,5 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/calendar_today.svg
+    - assets/icons/people.svg
