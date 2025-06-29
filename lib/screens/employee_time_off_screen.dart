@@ -1,18 +1,12 @@
 // lib/screens/employee_time_off_screen.dart
 import 'package:flutter/material.dart';
 import '../models/time_off_models.dart'; // Adjust import based on your project
-import '../widgets/expandable_employee_card.dart'; // Adjust import based on your project
-import '../widgets/employee_time_off_header.dart'; // Adjust import based on your project
+import '../widgets/expandable_employee_card.dart'; // Adjust import based on your project// Adjust import based on your project
 import '../widgets/app_header.dart'; // Import the new AppHeader
 import '../widgets/filter_dialog.dart';
 
 // You will also need to import this for DateFormat:
 import 'package:intl/intl.dart'; // Add this to your pubspec.yaml if not already: dependencies: intl: ^0.18.0 (or latest)
-
-// Add this at the top of your file if not already present
-import 'package:flutter/material.dart';
-
-// Paste CurvedTopBorderPainter here if not globally available
 
 class EmployeeTimeOffScreen extends StatefulWidget {
   const EmployeeTimeOffScreen({super.key});

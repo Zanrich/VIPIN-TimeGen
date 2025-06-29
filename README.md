@@ -23,11 +23,13 @@ A Flutter mobile application for employer time tracking and employee management.
 
 1. Clone the repository
 2. Install dependencies:
+
    ```bash
    flutter pub get
    ```
 
 3. Copy assets from the original project:
+
    - Copy all images from `public/` to `assets/images/`
    - Copy all SVG icons to `assets/icons/`
 
@@ -44,13 +46,17 @@ lib/
 ├── models/                   # Data models
 │   ├── menu_item.dart
 │   └── nav_item.dart
+│   └── time_off_models.dart
 ├── screens/                  # App screens
 │   └── employer_dash_screen.dart
+|   └── employee_time_off_screen.dart
 └── widgets/                  # Reusable widgets
     ├── app_header.dart
-    ├── bottom_navigation.dart
+    ├── custom_bottom_navigation.dart
+    ├── expandable_employee_card.dart
+    ├── filter_dialog.dart
     ├── menu_item_card.dart
-    └── status_bar.dart
+    └── time_off_card.dart
 ```
 
 ## Assets Setup
@@ -58,7 +64,7 @@ lib/
 Make sure to copy the following assets from your original project:
 
 ### Images (copy to `assets/images/`):
-- battery.png
+
 - user-10.png
 - identity-1.png
 - report--1--2.png
@@ -66,23 +72,22 @@ Make sure to copy the following assets from your original project:
 - gps--2--1.png
 - event-3.png
 - employee--1--2.png
-- image-72.png
-- rectangle-5578.svg
-- time.svg
-- mobile-signal.svg
-- wifi.svg
+- filterGroup.png
 
 ### Icons (copy to `assets/icons/`):
+
 - vector.svg
 
 ## Building
 
 ### Android
+
 ```bash
 flutter build apk --release
 ```
 
 ### iOS
+
 ```bash
 flutter build ios --release
 ```
