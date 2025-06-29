@@ -140,20 +140,24 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Avatar
-                    CircleAvatar(
-                      radius: 27,
-                      backgroundColor: const Color(0xFFBDBDBD),
-                      backgroundImage: widget.employee.avatar.isNotEmpty
-                          ? AssetImage(widget.employee.avatar)
-                          : null,
-                      child: widget.employee.avatar.isEmpty
-                          ? const Icon(Icons.person,
-                              color: Colors.white, size: 32)
-                          : null,
+                    SizedBox(
+                      width: 54,
+                      height: 54,
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/user-10.png',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: const Color(0xFFBDBDBD),
+                              child: const Icon(Icons.person,
+                                  color: Colors.white, size: 32),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 18),
-                    // Name, subtitle
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,23 +188,18 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                         ],
                       ),
                     ),
-                    // Status chip in collapsed state (aligned to top-right of initial row)
+                    // Status chip in collapsed state
                     if (!_expanded) _buildStatusChip(),
                   ],
                 ),
-                // Expanded content section
                 SizeTransition(
                   sizeFactor: _expandAnimation,
                   axisAlignment: -1.0,
-                  // Use a Column for flexible height within the expanded section
-                  // Ensure it can grow as needed and properly place the spacer.
                   child: IntrinsicHeight(
-                    // Helps the Column determine its height based on its children
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 16),
-                        const Divider(color: Colors.white12, height: 1),
                         const SizedBox(height: 12),
                         _buildDetailRow(
                             'Submitted:', widget.entry.submittedDate),
@@ -232,104 +231,112 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                           _buildDetailRow(
                               'Declined:', '[${widget.entry.declinedDate!}]'),
 
-                        // This Spacer needs to be correctly constrained by its parent.
-                        // By placing the content inside IntrinsicHeight, the Column tries to take
-                        // minimum height, and then the Spacer tries to take remaining.
-                        // For a dynamic height column inside a list, often Expanded is better
-                        // but that requires the parent to be a Row/Column, which SizeTransition isn't directly.
-                        // Let's try placing this in an Expanded in a Row to give it infinite height to fill.
-                        // Removed direct Spacer, will handle spacing with bottom row.
-
-                        const SizedBox(
-                            height: 18), // Space before buttons/status chip
-
-                        // Row for buttons and status chip at the bottom when expanded
-                        // This row needs to push itself to the bottom of the expanded area.
-                        // If the column has intrinsic height, its height will fit its children.
-                        // To push this row to the bottom, the parent column must be given
-                        // flexible space using an Expanded widget, or a fixed height.
-                        // Let's reconsider the Spacer here. If this Column is inside SizeTransition,
-                        // it needs to calculate its own height. A Spacer within it will try to
-                        // expand vertically within that calculated height.
-
-                        // Let's put a flexible space here if we want the buttons/chip
-                        // to be at the "bottom" of a potentially larger card area.
-                        // If the card's height is determined by its content, and we want
-                        // the buttons at the very bottom, then the content above it
-                        // needs to be flexible, or the entire column needs a min height.
-
-                        // Re-introducing Spacer within an Expanded to allow it to push content up
-                        // This Spacer must be within a Flexible or Expanded widget to work.
-                        // Since the parent of this column is SizeTransition, its height is determined
-                        // by its children. We need this column to take *all available vertical space*
-                        // within the expanded area, then the Spacer works.
-                        // This is tricky with SizeTransition which animates content height.
-
-                        // Option 1: Just add vertical space instead of a Spacer.
-                        // This makes the card just tall enough for its content + buttons.
-                        // This looks like what the image is doing for most cases.
-                        // No explicit Spacer, just `SizedBox` for spacing.
-
-                        // If you *really* want the buttons/status to push to the *absolute* bottom
-                        // of a *predefined* expanded height, it's more complex with SizeTransition.
-                        // For now, matching the screenshot where content dictates height:
+                        // --- ADJUSTED SPACE AND ALIGNMENT START ---
+                        if (isPending)
+                          const SizedBox(
+                              height: 18), // Space before buttons if pending
+                        // Conditional row for buttons and status chip
                         Row(
-                          mainAxisAlignment:
-                              MainAxisAlignment.end, // Align to the right
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment
+                              .end, // Align children to the bottom
                           children: [
                             if (isPending) ...[
                               // Only show buttons if status is pending
-                              // Approve button
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _localStatus = 'approved';
-                                    _expanded = false; // Collapse after action
-                                    _animationController.reverse();
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF00DAE7),
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                              Container(
+                                width: 97,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color(0xFF00DAE7),
+                                      Color(0xFF007A81)
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 8),
+                                  borderRadius: BorderRadius.circular(50),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Color(0x59000000),
+                                      offset: Offset(4, 4),
+                                      blurRadius: 4,
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
-                                child: const Text('Approve',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600)),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _localStatus = 'approved';
+                                      _expanded = false;
+                                      _animationController.reverse();
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent,
+                                    foregroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                  ).copyWith(
+                                      elevation: MaterialStateProperty.all(0)),
+                                  child: const Text(
+                                    'Approve',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
                               ),
                               const SizedBox(width: 12),
-                              // Decline button
-                              OutlinedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _localStatus = 'declined';
-                                    _expanded = false; // Collapse after action
-                                    _animationController.reverse();
-                                  });
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(color: Colors.white),
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                              SizedBox(
+                                width: 97,
+                                height: 30,
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _localStatus = 'declined';
+                                      _expanded = false;
+                                      _animationController.reverse();
+                                    });
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    foregroundColor: Colors.black,
+                                    side: const BorderSide(
+                                      color: Colors.white,
+                                      width: 1,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    padding: EdgeInsets.zero,
+                                  ).copyWith(
+                                    shadowColor: MaterialStateProperty.all(
+                                        const Color(0x59000000)),
+                                    elevation: MaterialStateProperty.all(4),
                                   ),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 24, vertical: 8),
+                                  child: const Text(
+                                    'Decline',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
-                                child: const Text('Decline',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600)),
                               ),
                               const SizedBox(
                                   width: 12), // Space between buttons and chip
                             ],
-                            _buildStatusChip(), // Status chip always at the bottom right when expanded
+                            // Moved status chip to be part of this row
+                            _buildStatusChip(),
                           ],
                         ),
+                        // --- ADJUSTED SPACE AND ALIGNMENT END ---
                       ],
                     ),
                   ),

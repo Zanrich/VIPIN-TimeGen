@@ -277,12 +277,12 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                       // Blue Top Border (rounded, clipped to match card)
                       Positioned(
                         top: 0,
-                        left: 0,
-                        right: 0,
+                        left: -3,
+                        right: -3,
                         child: CustomPaint(
                           size: const Size(double.infinity, 8),
                           painter: CurvedTopBorderPainter(
-                            strokeWidth: 2,
+                            strokeWidth: 1,
                             radius: 30,
                             horizontalInset: 12,
                             color: const Color(0xFF00DAE7),
@@ -298,7 +298,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                             // Top row: Back button and title
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 22, vertical: 8),
+                                  horizontal: 0, vertical: 4),
                               child: Row(
                                 children: [
                                   IconButton(
@@ -329,7 +329,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                             // Filter button row (move this above the search bar)
                             Padding(
                               padding: const EdgeInsets.only(
-                                  top: 0, right: 22, bottom: 8),
+                                  top: 0, right: 22, bottom: 12),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -386,7 +386,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                             // Search bar row
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 22, vertical: 4),
+                                  horizontal: 20, vertical: 4),
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -433,7 +433,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                             Expanded(
                               child: ListView.builder(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 22, vertical: 10),
+                                    horizontal: 20, vertical: 10),
                                 itemCount: groupedEntries.length,
                                 itemBuilder: (context, index) {
                                   final date =
@@ -497,10 +497,10 @@ class CurvedTopBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
+    // final paint = Paint()
+    //   ..color = color
+    //   ..style = PaintingStyle.stroke
+    //   ..strokeWidth = strokeWidth;
 
     final double r = radius;
     final double w = size.width;
@@ -524,6 +524,21 @@ class CurvedTopBorderPainter extends CustomPainter {
       radius: Radius.circular(r),
       clockwise: true,
     );
+
+    // Create gradient shader
+    final gradient = LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: [
+        Color(0xFF00DAE7),
+        Color(0xFF0079A8),
+      ],
+    ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    final paint = Paint()
+      ..shader = gradient
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
 
     canvas.drawPath(path, paint);
   }

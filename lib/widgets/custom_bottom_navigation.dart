@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+// Removed: import 'package:flutter_svg/flutter_svg.dart'; // No longer needed if all icons are PNGs
 
 class CustomBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -14,10 +14,11 @@ class CustomBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      {'icon': 'assets/icons/home.svg', 'label': 'HOME'},
-      {'icon': 'assets/icons/calendar_today2.svg', 'label': 'TIMESHEETS'},
-      {'icon': 'assets/icons/people.svg', 'label': 'EMPLOYEES'},
-      {'icon': 'assets/icons/grid_view.svg', 'label': 'MENU'},
+      // IMPORTANT: Changed .svg to .png here
+      {'icon': 'assets/icons/home.png', 'label': 'HOME'},
+      {'icon': 'assets/icons/calendar_today.png', 'label': 'TIMESHEETS'},
+      {'icon': 'assets/icons/people.png', 'label': 'EMPLOYEES'},
+      {'icon': 'assets/icons/grid_view.png', 'label': 'MENU'},
     ];
 
     return Container(
@@ -59,13 +60,18 @@ class CustomBottomNavigation extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(
+                      // --- CHANGE IS HERE ---
+                      Image.asset(
                         items[index]['icon'] as String,
+                        // Use color and colorBlendMode to tint monochrome PNGs
                         color: isActive ? Colors.black : Colors.white,
+                        colorBlendMode:
+                            BlendMode.srcIn, // Important for tinting
                         width: 24,
                         height: 24,
-                        fit: BoxFit.contain,
+                        // fit: BoxFit.contain, // Not typically needed for Image.asset with explicit width/height
                       ),
+                      // --- END CHANGE ---
                       const SizedBox(height: 2),
                       Text(
                         items[index]['label'] as String,

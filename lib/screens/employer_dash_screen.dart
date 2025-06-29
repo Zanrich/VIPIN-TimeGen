@@ -97,8 +97,8 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
                       // Blue Top Border (rounded, clipped to match card)
                       Positioned(
                         top: 0,
-                        left: 0,
-                        right: 0,
+                        left: -3,
+                        right: -3,
                         child: CustomPaint(
                           size: const Size(double.infinity, 8),
                           painter: CurvedTopBorderPainter(
@@ -112,13 +112,14 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
                       // Main Content
                       Padding(
                         padding: const EdgeInsets.only(
-                            top: 32, left: 24, right: 24, bottom: 24),
+                            top: 32, left: 14, right: 14, bottom: 24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const SizedBox(height: 16),
                             const Text(
                               'Welcome Back',
+                              
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Roboto',

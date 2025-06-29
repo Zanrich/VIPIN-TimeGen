@@ -88,7 +88,7 @@ class CustomBottomNavigation extends StatelessWidget {
             child: Column(
               children: [
                 SvgPicture.asset(
-                  'assets/icons/calendar_today.svg',
+                  'assets/icons/calendar_today.png',
                   width: 24,
                   height: 24,
                   color: Colors.white, // Optional: force icon to white
