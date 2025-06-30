@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/time_off_models.dart';
+import '../models/time_off_models.dart'; // <-- Use your app's models
 
 class ExpandableEmployeeCard extends StatefulWidget {
-  final EmployeeTimeOffData employee;
-  final TimeOffEntryData entry;
+  final EmployeeTimeOffData employee; // <-- Use your model
+  final TimeOffEntryData entry; // <-- Use your model
 
   const ExpandableEmployeeCard({
     super.key,
@@ -20,7 +20,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
   bool _expanded = false;
   late AnimationController _animationController;
   late Animation<double> _expandAnimation;
-  String? _localStatus;
+  String? _localStatus; // To manage status locally after action
 
   @override
   void initState() {
@@ -54,11 +54,13 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
 
   @override
   Widget build(BuildContext context) {
-    final String normalisedStatus =
-        (_localStatus ?? widget.entry.status).trim().toLowerCase();
+    // Determine the current status, preferring local override if set
+    final String currentStatus = _localStatus ?? widget.entry.status;
+    final String normalisedStatus = currentStatus.trim().toLowerCase();
     final bool isPending = normalisedStatus == 'pending' ||
         normalisedStatus == 'awaiting approval';
 
+    /// -------- Colours & Labels for status chip ----------
     Color statusBorderColor;
     Color statusTextColor;
     Color statusBgColor;
@@ -85,6 +87,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
         statusDisplayText = 'AWAITING APPROVAL';
     }
 
+    /// ---------- Re‑usable status chip -------------
     Widget buildStatusChip() {
       return Container(
         height: 21,
@@ -111,7 +114,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: const Color(0xFF2B2B2B),
         borderRadius: BorderRadius.circular(20),
@@ -134,6 +137,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                /// ---------- HEADER ----------
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -144,13 +148,11 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                         child: Image.asset(
                           'assets/images/user-10.png',
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: const Color(0xFFBDBDBD),
-                              child: const Icon(Icons.person,
-                                  color: Colors.white, size: 32),
-                            );
-                          },
+                          errorBuilder: (_, __, ___) => Container(
+                            color: const Color(0xFFBDBDBD),
+                            child: const Icon(Icons.person,
+                                color: Colors.white, size: 32),
+                          ),
                         ),
                       ),
                     ),
@@ -158,7 +160,6 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             widget.employee.name,
@@ -185,145 +186,161 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                         ],
                       ),
                     ),
-                    if (!_expanded) buildStatusChip(),
+                    // Only show status chip in header if NOT expanded
+                    if (!_expanded) ...[
+                      // MODIFIED: Simplified condition here
+                      const SizedBox(width: 8),
+                      buildStatusChip(),
+                    ],
                   ],
                 ),
+
+                /// ---------- EXPANDED SECTION ----------
                 SizeTransition(
                   sizeFactor: _expandAnimation,
-                  axisAlignment: -1.0,
-                  child: IntrinsicHeight(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        const SizedBox(height: 12),
+                  axisAlignment: -1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      _buildDetailRow('Submitted:', widget.entry.submittedDate),
+                      _buildDetailRow(
+                        'Date:',
+                        '[${widget.entry.startDate} - ${widget.entry.endDate}] '
+                            '([${widget.entry.daysCount}] ${widget.entry.daysCount == 1 ? 'Day' : 'Days'})',
+                      ),
+                      _buildDetailRow('Doctor\'s Note:',
+                          widget.entry.doctorsNote! ? 'Yes' : 'No'),
+                      if (widget.entry.comment?.isNotEmpty ?? false)
                         _buildDetailRow(
-                            'Submitted:', widget.entry.submittedDate),
+                            'Comment:', '[${widget.entry.comment!}]'),
+                      if (widget.entry.managerComment?.isNotEmpty ?? false)
+                        _buildDetailRow('Comment [Manager]:',
+                            '[${widget.entry.managerComment!}]'),
+                      if (normalisedStatus == 'approved' &&
+                          widget.entry.approvedDate != null)
                         _buildDetailRow(
-                          'Date:',
-                          '[${widget.entry.startDate} - ${widget.entry.endDate}] ([${widget.entry.daysCount}] ${widget.entry.daysCount == 1 ? 'Day' : 'Days'})',
+                            'Approved:', '[${widget.entry.approvedDate!}]'),
+                      if (normalisedStatus == 'declined' &&
+                          widget.entry.declinedDate != null)
+                        _buildDetailRow(
+                            'Declined:', '[${widget.entry.declinedDate!}]'),
+
+                      /// -------- BUTTONS & CHIP (bottom‑right) ----------
+                      if (isPending) ...[
+                        const SizedBox(height: 18),
+                        // Left-aligned buttons
+                        Row(
+                          children: [
+                            // ---- Approve Button ----
+                            Container(
+                              width: 97,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF00DAE7),
+                                    Color(0xFF007A81)
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(50),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0x59000000),
+                                    offset: Offset(4, 4),
+                                    blurRadius: 4,
+                                    spreadRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _localStatus = 'approved';
+                                    _expanded = false;
+                                    _animationController.reverse();
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                  shadowColor: Colors.transparent,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                ).copyWith(
+                                    elevation: WidgetStateProperty.all(0)),
+                                child: const Text(
+                                  'Approve',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            // ---- Decline Button ----
+                            SizedBox(
+                              width: 97,
+                              height: 30,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _localStatus = 'declined';
+                                    _expanded = false;
+                                    _animationController.reverse();
+                                  });
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                  side: const BorderSide(
+                                      color: Colors.white, width: 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                ).copyWith(
+                                  shadowColor: WidgetStateProperty.all(
+                                      const Color(0x59000000)),
+                                  elevation: WidgetStateProperty.all(4),
+                                ),
+                                child: const Text(
+                                  'Decline',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        _buildDetailRow('Doctor\'s Note:',
-                            widget.entry.doctorsNote! ? 'Yes' : 'No'),
-                        if (widget.entry.comment != null &&
-                            widget.entry.comment!.isNotEmpty)
-                          _buildDetailRow(
-                              'Comment:', '[${widget.entry.comment!}]'),
-                        if (widget.entry.managerComment != null &&
-                            widget.entry.managerComment!.isNotEmpty)
-                          _buildDetailRow('Comment [Manager]:',
-                              '[${widget.entry.managerComment!}]'),
-                        if ((_localStatus ?? widget.entry.status)
-                                    .toLowerCase() ==
-                                'approved' &&
-                            widget.entry.approvedDate != null)
-                          _buildDetailRow(
-                              'Approved:', '[${widget.entry.approvedDate!}]'),
-                        if ((_localStatus ?? widget.entry.status)
-                                    .toLowerCase() ==
-                                'declined' &&
-                            widget.entry.declinedDate != null)
-                          _buildDetailRow(
-                              'Declined:', '[${widget.entry.declinedDate!}]'),
-                        if (isPending) const SizedBox(height: 18),
+                        const SizedBox(height: 5),
+
+                        // Status chip on its own line, right-aligned, unchanged size
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            if (isPending) ...[
-                              Container(
-                                width: 97,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFF00DAE7),
-                                      Color(0xFF007A81)
-                                    ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                  ),
-                                  borderRadius: BorderRadius.circular(50),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: Color(0x59000000),
-                                      offset: Offset(4, 4),
-                                      blurRadius: 4,
-                                      spreadRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _localStatus = 'approved';
-                                      _expanded = false;
-                                      _animationController.reverse();
-                                    });
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.transparent,
-                                    shadowColor: Colors.transparent,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    padding: EdgeInsets.zero,
-                                  ).copyWith(
-                                      elevation: WidgetStateProperty.all(0)),
-                                  child: const Text(
-                                    'Approve',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              SizedBox(
-                                width: 97,
-                                height: 30,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      _localStatus = 'declined';
-                                      _expanded = false;
-                                      _animationController.reverse();
-                                    });
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    foregroundColor: Colors.black,
-                                    side: const BorderSide(
-                                      color: Colors.white,
-                                      width: 1,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    padding: EdgeInsets.zero,
-                                  ).copyWith(
-                                    shadowColor: WidgetStateProperty.all(
-                                        const Color(0x59000000)),
-                                    elevation: WidgetStateProperty.all(4),
-                                  ),
-                                  child: const Text(
-                                    'Decline',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                            ],
+                            buildStatusChip(),
+                          ],
+                        ),
+                      ]
+                      // This part shows the status chip at the bottom right when expanded and not pending
+                      else if (_expanded) ...[
+                        const SizedBox(height: 18),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
                             buildStatusChip(),
                           ],
                         ),
                       ],
-                    ),
+                    ],
                   ),
                 ),
               ],
@@ -334,6 +351,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
     );
   }
 
+  /// Helper for key‑value rows in the expanded details
   Widget _buildDetailRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),

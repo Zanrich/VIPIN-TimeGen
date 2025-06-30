@@ -141,7 +141,14 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
+        padding: EdgeInsets.only(
+          left: 8,
+          right: 8,
+          // Calculate bottom padding based on the safe area inset
+          // and add a small buffer if desired.
+          bottom: MediaQuery.of(context).padding.bottom +
+              10.0, // This is the crucial line
+        ),
         child: CustomBottomNavigation(
           currentIndex: _currentIndex,
           onTap: _onNavTap,
