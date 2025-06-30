@@ -85,7 +85,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
         statusDisplayText = 'AWAITING APPROVAL';
     }
 
-    Widget _buildStatusChip() {
+    Widget buildStatusChip() {
       return Container(
         height: 21,
         constraints: const BoxConstraints(minWidth: 64),
@@ -185,7 +185,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                         ],
                       ),
                     ),
-                    if (!_expanded) _buildStatusChip(),
+                    if (!_expanded) buildStatusChip(),
                   ],
                 ),
                 SizeTransition(
@@ -203,9 +203,8 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                           'Date:',
                           '[${widget.entry.startDate} - ${widget.entry.endDate}] ([${widget.entry.daysCount}] ${widget.entry.daysCount == 1 ? 'Day' : 'Days'})',
                         ),
-                        if (widget.entry.doctorsNote != null)
-                          _buildDetailRow('Doctor\'s Note:',
-                              widget.entry.doctorsNote! ? 'Yes' : 'No'),
+                        _buildDetailRow('Doctor\'s Note:',
+                            widget.entry.doctorsNote! ? 'Yes' : 'No'),
                         if (widget.entry.comment != null &&
                             widget.entry.comment!.isNotEmpty)
                           _buildDetailRow(
@@ -271,7 +270,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                                     ),
                                     padding: EdgeInsets.zero,
                                   ).copyWith(
-                                      elevation: MaterialStateProperty.all(0)),
+                                      elevation: WidgetStateProperty.all(0)),
                                   child: const Text(
                                     'Approve',
                                     style: TextStyle(
@@ -305,9 +304,9 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                                     ),
                                     padding: EdgeInsets.zero,
                                   ).copyWith(
-                                    shadowColor: MaterialStateProperty.all(
+                                    shadowColor: WidgetStateProperty.all(
                                         const Color(0x59000000)),
-                                    elevation: MaterialStateProperty.all(4),
+                                    elevation: WidgetStateProperty.all(4),
                                   ),
                                   child: const Text(
                                     'Decline',
@@ -320,7 +319,7 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                               ),
                               const SizedBox(width: 12),
                             ],
-                            _buildStatusChip(),
+                            buildStatusChip(),
                           ],
                         ),
                       ],

@@ -177,6 +177,12 @@ class _FilterDialogState extends State<FilterDialog> {
                                         _tempSelectedFilters.clear();
                                       });
                                     },
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: const Size(0, 0),
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
                                     child: const Text(
                                       'Clear Filter',
                                       style: TextStyle(
@@ -185,12 +191,6 @@ class _FilterDialogState extends State<FilterDialog> {
                                         decoration: TextDecoration.underline,
                                         fontWeight: FontWeight.normal,
                                       ),
-                                    ),
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      minimumSize: Size(0, 0),
-                                      tapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
                                     ),
                                   ),
                                 ],

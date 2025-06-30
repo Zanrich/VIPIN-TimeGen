@@ -53,7 +53,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
   // Dummy data generation function
   List<TimeOffEntryData> _generateDummyData() {
     return [
-      TimeOffEntryData(
+      const TimeOffEntryData(
         id: '1',
         type: 'Sick Leave',
         status: 'Awaiting Approval',
@@ -65,7 +65,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         doctorsNote: false,
         comment: 'Tummy Bug',
       ),
-      TimeOffEntryData(
+      const TimeOffEntryData(
         id: '2',
         type: 'Sick Leave',
         status: 'Approved',
@@ -77,7 +77,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         doctorsNote: true,
         approvedDate: '28 February 2025',
       ),
-      TimeOffEntryData(
+      const TimeOffEntryData(
         id: '3',
         type: 'Annual Leave',
         status: 'Declined',
@@ -91,7 +91,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
             'Another employee in the department is already on leave in the requested time. Submit leave for 24 March - 31 March',
         declinedDate: '28 February 2025',
       ),
-      TimeOffEntryData(
+      const TimeOffEntryData(
         id: '4',
         type: 'Annual Leave',
         status: 'Approved',
@@ -102,7 +102,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         reason: 'Family trip',
         doctorsNote: false,
       ),
-      TimeOffEntryData(
+      const TimeOffEntryData(
         id: '5',
         type: 'Family Responsibility',
         status: 'Awaiting Approval',
@@ -113,7 +113,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         reason: 'Family emergency',
         doctorsNote: false,
       ),
-      TimeOffEntryData(
+      const TimeOffEntryData(
         // New entry to match screenshot for approved
         id: '6',
         type: 'Annual Leave',
@@ -131,7 +131,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
   EmployeeTimeOffData _getEmployeeForEntry(TimeOffEntryData entry) {
     switch (entry.id) {
       case '1':
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: '101',
           name: 'Employee name', // Matches "Driver" for 'Tummy Bug'
           position: 'Driver',
@@ -139,7 +139,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           timeOffEntries: [],
         );
       case '2':
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: '102',
           name:
               'Sarah Johnson', // Matches "Project Manager" for approved sick leave
@@ -148,7 +148,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           timeOffEntries: [],
         );
       case '3':
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: '103',
           name:
               'Mike Wilson', // Matches "General Worker" for declined annual leave
@@ -157,7 +157,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           timeOffEntries: [],
         );
       case '4':
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: '104',
           name: 'Jane Doe', // Example for approved annual leave (10 days)
           position: 'Software Engineer',
@@ -165,7 +165,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           timeOffEntries: [],
         );
       case '5':
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: '105',
           name: 'Emma Davis', // Matches "Designer" for family responsibility
           position: 'Designer',
@@ -173,7 +173,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           timeOffEntries: [],
         );
       case '6':
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: '106',
           name: 'John Smith', // New dummy employee for the extra approved entry
           position: 'Supervisor',
@@ -181,7 +181,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
           timeOffEntries: [],
         );
       default:
-        return EmployeeTimeOffData(
+        return const EmployeeTimeOffData(
           id: 'unknown',
           name: 'Unknown Employee',
           position: 'N/A',
@@ -284,11 +284,11 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                                         Navigator.of(context).pop(),
                                     splashRadius: 24,
                                   ),
-                                  Expanded(
+                                  const Expanded(
                                     child: Center(
                                       child: Text(
                                         'Employee Time Off',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18,
                                           fontWeight: FontWeight.w700,
@@ -306,7 +306,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 40,
                                     height: 40,
                                     child: ClipOval(
@@ -432,7 +432,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                                             _getEmployeeForEntry(entry);
                                         return ExpandableEmployeeCard(
                                             employee: employee, entry: entry);
-                                      }).toList(),
+                                      }),
                                     ],
                                   );
                                 },
@@ -487,7 +487,7 @@ class CurvedTopBorderPainter extends CustomPainter {
       clockwise: true,
     );
 
-    final gradient = LinearGradient(
+    final gradient = const LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [
