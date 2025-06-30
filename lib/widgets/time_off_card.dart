@@ -1,9 +1,7 @@
-// lib/models/time_off_models.dart
-
 class EmployeeTimeOffData {
   final String name;
   final String position;
-  final String avatar; // Path to avatar image or empty string
+  final String avatar;
 
   EmployeeTimeOffData({
     required this.name,

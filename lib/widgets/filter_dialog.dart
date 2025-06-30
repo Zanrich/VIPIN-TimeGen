@@ -1,4 +1,4 @@
-import 'dart:ui'; // Add this import at the top
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class FilterDialog extends StatefulWidget {
@@ -34,7 +34,6 @@ class _FilterDialogState extends State<FilterDialog> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Blurred background
         Positioned.fill(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
@@ -52,7 +51,6 @@ class _FilterDialogState extends State<FilterDialog> {
                 insetPadding: const EdgeInsets.symmetric(horizontal: 14),
                 child: Stack(
                   children: [
-                    // Gradient border container
                     Container(
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
@@ -66,7 +64,7 @@ class _FilterDialogState extends State<FilterDialog> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Container(
-                        margin: const EdgeInsets.all(1), // Border thickness
+                        margin: const EdgeInsets.all(1),
                         decoration: BoxDecoration(
                           color: const Color(0xFF2B2B2B),
                           borderRadius: BorderRadius.circular(19),
@@ -76,10 +74,8 @@ class _FilterDialogState extends State<FilterDialog> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            // HEADER SECTION
                             Stack(
                               children: [
-                                // Gradient border for header (top, left, right, bottomLeft)
                                 Container(
                                   height: 77,
                                   width: double.infinity,
@@ -89,18 +85,16 @@ class _FilterDialogState extends State<FilterDialog> {
                                       end: Alignment.centerRight,
                                       colors: [
                                         Color(0xFF00DAE7),
-                                        Color(0x020286B1), // transparent
+                                        Color(0x020286B1),
                                       ],
                                     ),
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(20),
                                       topRight: Radius.circular(20),
-                                      bottomLeft:
-                                          Radius.circular(20), // <-- add this
+                                      bottomLeft: Radius.circular(20),
                                     ),
                                   ),
                                 ),
-                                // Solid background for header, slightly inset to show border
                                 Container(
                                   height: 75,
                                   margin: const EdgeInsets.only(
@@ -111,8 +105,7 @@ class _FilterDialogState extends State<FilterDialog> {
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(19),
                                       topRight: Radius.circular(19),
-                                      bottomLeft:
-                                          Radius.circular(19), // <-- add this
+                                      bottomLeft: Radius.circular(19),
                                     ),
                                   ),
                                   child: Row(
@@ -156,7 +149,6 @@ class _FilterDialogState extends State<FilterDialog> {
                                 ),
                               ],
                             ),
-                            // CONTENT SECTION
                             Container(
                               width: double.infinity,
                               decoration: const BoxDecoration(
@@ -171,11 +163,9 @@ class _FilterDialogState extends State<FilterDialog> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Filter Options
                                   ..._filterOptions.map(
                                       (option) => _buildFilterOption(option)),
                                   const SizedBox(height: 32),
-                                  // Apply Button
                                   SizedBox(
                                     width: double.infinity,
                                     child: _buildApplyButton(),
@@ -186,19 +176,14 @@ class _FilterDialogState extends State<FilterDialog> {
                                       setState(() {
                                         _tempSelectedFilters.clear();
                                       });
-                                      // Optionally, immediately apply the clear:
-                                      // widget.onFiltersChanged([]);
-                                      // Navigator.pop(context);
                                     },
                                     child: const Text(
                                       'Clear Filter',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
-                                        decoration: TextDecoration
-                                            .underline, // underline only
-                                        fontWeight:
-                                            FontWeight.normal, // not bold
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.normal,
                                       ),
                                     ),
                                     style: TextButton.styleFrom(
@@ -273,7 +258,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   child: isSelected
                       ? const Icon(
                           Icons.check,
-                          color: Colors.black, // <-- black checkmark
+                          color: Colors.black,
                           size: 16,
                         )
                       : null,
@@ -313,8 +298,8 @@ class _FilterDialogState extends State<FilterDialog> {
               'Apply',
               style: TextStyle(
                 fontFamily: 'Roboto',
-                fontWeight: FontWeight.bold, // <-- not bold
-                color: Colors.black, // <-- black text
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
                 fontSize: 16,
               ),
             ),

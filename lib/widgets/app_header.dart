@@ -6,14 +6,13 @@ class AppHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF111111), // Match notification bar
+      color: const Color(0xFF111111),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: SafeArea(
         bottom: false,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Profile Image in White Circle
             Container(
               width: 48,
               height: 48,
@@ -30,8 +29,6 @@ class AppHeader extends StatelessWidget {
                 ),
               ),
             ),
-
-            // App Title
             const Text(
               'Time Gen',
               style: TextStyle(
@@ -41,8 +38,6 @@ class AppHeader extends StatelessWidget {
                 fontSize: 28,
               ),
             ),
-
-            // Close Button with white background and black icon
             Container(
               width: 40,
               height: 40,

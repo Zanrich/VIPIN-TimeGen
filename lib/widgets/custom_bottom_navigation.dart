@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// Removed: import 'package:flutter_svg/flutter_svg.dart'; // No longer needed if all icons are PNGs
 
 class CustomBottomNavigation extends StatelessWidget {
   final int currentIndex;
@@ -14,7 +13,6 @@ class CustomBottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = [
-      // IMPORTANT: Changed .svg to .png here
       {'icon': 'assets/icons/home.png', 'label': 'HOME'},
       {'icon': 'assets/icons/calendar_today.png', 'label': 'TIMESHEETS'},
       {'icon': 'assets/icons/people.png', 'label': 'EMPLOYEES'},
@@ -60,18 +58,13 @@ class CustomBottomNavigation extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // --- CHANGE IS HERE ---
                       Image.asset(
                         items[index]['icon'] as String,
-                        // Use color and colorBlendMode to tint monochrome PNGs
                         color: isActive ? Colors.black : Colors.white,
-                        colorBlendMode:
-                            BlendMode.srcIn, // Important for tinting
+                        colorBlendMode: BlendMode.srcIn,
                         width: 24,
                         height: 24,
-                        // fit: BoxFit.contain, // Not typically needed for Image.asset with explicit width/height
                       ),
-                      // --- END CHANGE ---
                       const SizedBox(height: 2),
                       Text(
                         items[index]['label'] as String,

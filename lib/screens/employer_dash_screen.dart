@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../widgets/menu_item_card.dart';
 import '../widgets/custom_bottom_navigation.dart';
 import '../models/menu_item.dart';
@@ -70,9 +69,7 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header Section
             const AppHeader(),
-            // Main Card Section fills the rest of the screen
             Expanded(
               child: Center(
                 child: Container(
@@ -94,7 +91,6 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
                   ),
                   child: Stack(
                     children: [
-                      // Blue Top Border (rounded, clipped to match card)
                       Positioned(
                         top: 0,
                         left: -3,
@@ -109,7 +105,6 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
                           ),
                         ),
                       ),
-                      // Main Content
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 32, left: 14, right: 14, bottom: 24),
@@ -119,7 +114,6 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
                             const SizedBox(height: 16),
                             const Text(
                               'Welcome Back',
-                              
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontFamily: 'Roboto',
@@ -130,12 +124,10 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
                               ),
                             ),
                             const SizedBox(height: 24),
-                            // Menu Items
                             ...menuItems.map((item) => Padding(
                                   padding: const EdgeInsets.only(bottom: 16),
                                   child: MenuItemCard(item: item),
                                 )),
-                            // Spacer to push content to the top if needed
                             const Spacer(),
                           ],
                         ),
@@ -148,7 +140,6 @@ class _EmployerDashScreenState extends State<EmployerDashScreen> {
           ],
         ),
       ),
-      // Navigation bar pinned to the bottom
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 16, left: 8, right: 8),
         child: CustomBottomNavigation(
@@ -169,10 +160,10 @@ class CurvedTopBorderPainter extends CustomPainter {
     required this.strokeWidth,
     required this.radius,
     required this.horizontalInset,
-    required this.color, // keep for compatibility, but not used
+    required this.color,
   });
 
-  final Color color; // not used, but kept for constructor compatibility
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -182,20 +173,16 @@ class CurvedTopBorderPainter extends CustomPainter {
 
     final path = Path();
 
-    // Start at the left, just after the curve
     path.moveTo(r, h);
 
-    // Draw left arc (top left corner)
     path.arcToPoint(
       Offset(0, r + h),
       radius: Radius.circular(r),
       clockwise: false,
     );
 
-    // Draw straight line
     path.lineTo(0, h + h);
 
-    // Move to right side, draw straight line
     path.moveTo(width, r + h);
     path.arcToPoint(
       Offset(width - r, h),
@@ -203,12 +190,10 @@ class CurvedTopBorderPainter extends CustomPainter {
       clockwise: false,
     );
 
-    // Draw straight line between the two arcs
     path.moveTo(r, h);
     path.lineTo(width - r, h);
 
-    // Create gradient shader
-    final gradient = LinearGradient(
+    final gradient = const LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [

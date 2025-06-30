@@ -4,14 +4,14 @@ class TimeOffEntryData {
   final String submittedDate;
   final String startDate;
   final String endDate;
-  final String status; // 'awaiting approval', 'approved', 'declined'
+  final String status;
   final String reason;
   final int daysCount;
   final bool doctorsNote;
   final String? approvedDate;
   final String? declinedDate;
   final String? managerComment;
-  final String? comment; // <-- Add this line
+  final String? comment;
 
   const TimeOffEntryData({
     required this.id,

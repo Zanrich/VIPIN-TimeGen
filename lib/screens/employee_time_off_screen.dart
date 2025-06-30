@@ -1,12 +1,9 @@
-// lib/screens/employee_time_off_screen.dart
 import 'package:flutter/material.dart';
-import '../models/time_off_models.dart'; // Adjust import based on your project
-import '../widgets/expandable_employee_card.dart'; // Adjust import based on your project// Adjust import based on your project
-import '../widgets/app_header.dart'; // Import the new AppHeader
+import '../models/time_off_models.dart';
+import '../widgets/expandable_employee_card.dart';
+import '../widgets/app_header.dart';
 import '../widgets/filter_dialog.dart';
-
-// You will also need to import this for DateFormat:
-import 'package:intl/intl.dart'; // Add this to your pubspec.yaml if not already: dependencies: intl: ^0.18.0 (or latest)
+import 'package:intl/intl.dart';
 
 class EmployeeTimeOffScreen extends StatefulWidget {
   const EmployeeTimeOffScreen({super.key});
@@ -17,16 +14,15 @@ class EmployeeTimeOffScreen extends StatefulWidget {
 
 class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<TimeOffEntryData> _allTimeOffEntries = []; // Your full list of entries
-  List<TimeOffEntryData> _filteredTimeOffEntries =
-      []; // Entries filtered by search
+  List<TimeOffEntryData> _allTimeOffEntries = [];
+  List<TimeOffEntryData> _filteredTimeOffEntries = [];
   List<String> _selectedFilters = [];
 
   @override
   void initState() {
     super.initState();
-    _allTimeOffEntries = _generateDummyData(); // Initialize with dummy data
-    _filteredTimeOffEntries = _allTimeOffEntries; // Initially show all
+    _allTimeOffEntries = _generateDummyData();
+    _filteredTimeOffEntries = _allTimeOffEntries;
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -44,9 +40,7 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         _filteredTimeOffEntries = _allTimeOffEntries;
       } else {
         _filteredTimeOffEntries = _allTimeOffEntries.where((entry) {
-          // You can refine this search logic to include employee name, position, etc.
-          final employee = _getEmployeeForEntry(
-              entry); // Assuming you have a way to get the employee for an entry
+          final employee = _getEmployeeForEntry(entry);
           return employee.name.toLowerCase().contains(query) ||
               employee.position.toLowerCase().contains(query) ||
               entry.type.toLowerCase().contains(query) ||
@@ -58,7 +52,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
 
   // Dummy data generation function
   List<TimeOffEntryData> _generateDummyData() {
-    // In a real app, this data would come from an API or database
     return [
       TimeOffEntryData(
         id: '1',
@@ -135,12 +128,8 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
     ];
   }
 
-  // Helper to get employee data based on entry (you'll need to map this from your actual data source)
   EmployeeTimeOffData _getEmployeeForEntry(TimeOffEntryData entry) {
-    // This is a simplified mapping for dummy data.
-    // In a real app, you'd likely have a list of employees and find the matching one.
     switch (entry.id) {
-      // Using ID for more robust dummy data mapping
       case '1':
         return EmployeeTimeOffData(
           id: '101',
@@ -202,7 +191,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
     }
   }
 
-  // Function to group entries by submitted date
   Map<String, List<TimeOffEntryData>> _groupEntriesByDate(
       List<TimeOffEntryData> entries) {
     Map<String, List<TimeOffEntryData>> grouped = {};
@@ -212,19 +200,15 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
       }
       grouped[entry.submittedDate]!.add(entry);
     }
-    // Sort dates in descending order (most recent first)
+
     final sortedKeys = grouped.keys.toList()
       ..sort((a, b) {
-        // Simple string comparison for dates like "DD Month YYYY" might not be perfect
-        // For robust sorting, you'd parse to DateTime objects
         try {
-          final dateFormat = DateFormat(
-              'dd MMMM yyyy'); // Adjust format to match your date strings
+          final dateFormat = DateFormat('dd MMMM yyyy');
           final dateA = dateFormat.parse(a);
           final dateB = dateFormat.parse(b);
-          return dateB.compareTo(dateA); // Descending order
+          return dateB.compareTo(dateA);
         } catch (e) {
-          // Fallback to string comparison if date parsing fails
           return b.compareTo(a);
         }
       });
@@ -246,11 +230,10 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
         child: Column(
           children: [
             const AppHeader(),
-            // Main rounded section with gradient border
             Expanded(
               child: Center(
                 child: Container(
-                  width: 423, // match your dashboard width
+                  width: 423,
                   decoration: const BoxDecoration(
                     color: Color(0xFF1F1F1F),
                     borderRadius: BorderRadius.only(
@@ -268,7 +251,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                   ),
                   child: Stack(
                     children: [
-                      // Blue Top Border (rounded, clipped to match card)
                       Positioned(
                         top: 0,
                         left: -3,
@@ -283,13 +265,11 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                           ),
                         ),
                       ),
-                      // Main Content
                       Padding(
                         padding: const EdgeInsets.only(
                             top: 32, left: 0, right: 0, bottom: 0),
                         child: Column(
                           children: [
-                            // Top row: Back button and title
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 0, vertical: 4),
@@ -320,7 +300,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                                 ],
                               ),
                             ),
-                            // Filter button row (move this above the search bar)
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 0, right: 22, bottom: 12),
@@ -377,7 +356,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
                                 ],
                               ),
                             ),
-                            // Search bar row
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 4),
@@ -475,7 +453,6 @@ class _EmployeeTimeOffScreenState extends State<EmployeeTimeOffScreen> {
   }
 }
 
-// CurvedTopBorderPainter class (paste this inside the same file or import if globally available)
 class CurvedTopBorderPainter extends CustomPainter {
   final double strokeWidth;
   final double radius;
@@ -483,7 +460,7 @@ class CurvedTopBorderPainter extends CustomPainter {
   final Color color;
 
   CurvedTopBorderPainter({
-    this.strokeWidth = 1, // 1px line
+    this.strokeWidth = 1,
     this.radius = 60,
     this.horizontalInset = 0,
     this.color = const Color(0xFF00DAE7),
@@ -491,35 +468,25 @@ class CurvedTopBorderPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // final paint = Paint()
-    //   ..color = color
-    //   ..style = PaintingStyle.stroke
-    //   ..strokeWidth = strokeWidth;
-
     final double r = radius;
     final double w = size.width;
     final double h = strokeWidth / 2;
 
     final path = Path();
 
-    // Start at left curve base
     path.moveTo(0, r + h);
-    // Top left curve
     path.arcToPoint(
       Offset(r, h),
       radius: Radius.circular(r),
       clockwise: true,
     );
-    // Top straight line
     path.lineTo(w - r, h);
-    // Top right curve
     path.arcToPoint(
       Offset(w, r + h),
       radius: Radius.circular(r),
       clockwise: true,
     );
 
-    // Create gradient shader
     final gradient = LinearGradient(
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,

@@ -1,6 +1,5 @@
-// lib/widgets/expandable_employee_card.dart
 import 'package:flutter/material.dart';
-import '../models/time_off_models.dart'; // Adjust import based on your project
+import '../models/time_off_models.dart';
 
 class ExpandableEmployeeCard extends StatefulWidget {
   final EmployeeTimeOffData employee;
@@ -60,11 +59,10 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
     final bool isPending = normalisedStatus == 'pending' ||
         normalisedStatus == 'awaiting approval';
 
-    // Status badge colors and text
     Color statusBorderColor;
     Color statusTextColor;
     Color statusBgColor;
-    String statusDisplayText; // Use a distinct variable for display text
+    String statusDisplayText;
 
     switch (normalisedStatus) {
       case 'approved':
@@ -80,14 +78,13 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
         statusBgColor = Colors.transparent;
         statusDisplayText = 'DECLINED';
         break;
-      default: // Awaiting Approval / Pending
+      default:
         statusBorderColor = const Color(0xFFBDBDBD);
         statusTextColor = const Color(0xFFBDBDBD);
         statusBgColor = Colors.transparent;
         statusDisplayText = 'AWAITING APPROVAL';
     }
 
-    // Function to create the status chip widget
     Widget _buildStatusChip() {
       return Container(
         height: 21,
@@ -188,7 +185,6 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                         ],
                       ),
                     ),
-                    // Status chip in collapsed state
                     if (!_expanded) _buildStatusChip(),
                   ],
                 ),
@@ -230,19 +226,12 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                             widget.entry.declinedDate != null)
                           _buildDetailRow(
                               'Declined:', '[${widget.entry.declinedDate!}]'),
-
-                        // --- ADJUSTED SPACE AND ALIGNMENT START ---
-                        if (isPending)
-                          const SizedBox(
-                              height: 18), // Space before buttons if pending
-                        // Conditional row for buttons and status chip
+                        if (isPending) const SizedBox(height: 18),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment
-                              .end, // Align children to the bottom
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             if (isPending) ...[
-                              // Only show buttons if status is pending
                               Container(
                                 width: 97,
                                 height: 30,
@@ -329,14 +318,11 @@ class _ExpandableEmployeeCardState extends State<ExpandableEmployeeCard>
                                   ),
                                 ),
                               ),
-                              const SizedBox(
-                                  width: 12), // Space between buttons and chip
+                              const SizedBox(width: 12),
                             ],
-                            // Moved status chip to be part of this row
                             _buildStatusChip(),
                           ],
                         ),
-                        // --- ADJUSTED SPACE AND ALIGNMENT END ---
                       ],
                     ),
                   ),

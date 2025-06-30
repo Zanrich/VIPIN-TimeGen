@@ -38,16 +38,12 @@ class MenuItemCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               children: [
-                // Menu Icon
                 Image.asset(
                   item.icon,
                   width: 42,
                   height: 42,
                 ),
-                
                 const SizedBox(width: 20),
-                
-                // Menu Title
                 Expanded(
                   child: Text(
                     item.title,
@@ -60,8 +56,6 @@ class MenuItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                
-                // Chevron Right
                 const Icon(
                   Icons.chevron_right,
                   color: Colors.white,
@@ -86,15 +80,12 @@ class MenuItemCard extends StatelessWidget {
         );
         break;
       case 'Scan Employee':
-        // TODO: Navigate to scan employee screen
         _showComingSoon(context, 'Scan Employee');
         break;
       case 'Flagged Events':
-        // TODO: Navigate to flagged events screen
         _showComingSoon(context, 'Flagged Events');
         break;
       case 'Add Employees for Manual Clocking':
-        // TODO: Navigate to manual clocking screen
         _showComingSoon(context, 'Manual Clocking');
         break;
       default:
